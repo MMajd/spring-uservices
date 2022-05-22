@@ -1,4 +1,4 @@
-include ':product-service'
-include ':review-service'
-include ':recommendation-service'
-include ':product-composite-service'
+include 'services:product-service'
+include 'services:review-service'
+include 'services:recommendation-service'
+include 'services:product-composite-service'
