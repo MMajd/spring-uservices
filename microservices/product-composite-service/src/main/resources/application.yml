@@ -1,7 +1,7 @@
 springdoc:
   swagger-ui.path: /openapi/swagger-ui.html
   api-docs.path: /openapi/v3/api-docs
-  packagesToScan: se.magnus.microservices.composite.product
+  packagesToScan: mmajd.microservices.composite.product
   pathsToMatch: /**
 
 api:
@@ -74,7 +74,7 @@ app:
 logging:
   level:
     root: INFO
-    se.magnus: DEBUG
+    mmajd: DEBUG
 
 ---
 spring.config.activate.on-profile: docker
