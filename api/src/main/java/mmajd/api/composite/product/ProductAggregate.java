@@ -3,16 +3,18 @@ package mmajd.api.composite.product;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class ProductAggregate {
-  private final int productId;
-  private final String name;
-  private final int weight;
-  private final List<RecommendationSummary> recommendations;
-  private final List<ReviewSummary> reviews;
-  private final ServiceAddresses serviceAddresses;
+  private int productId;
+  private String name;
+  private int weight;
+  private List<RecommendationSummary> recommendations;
+  private List<ReviewSummary> reviews;
+  private ServiceAddresses serviceAddresses;
 }

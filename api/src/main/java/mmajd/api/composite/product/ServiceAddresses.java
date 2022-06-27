@@ -2,12 +2,15 @@ package mmajd.api.composite.product;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 @Data
+@NoArgsConstructor
 @AllArgsConstructor
 public class ServiceAddresses {
-  private final String cmp;
-  private final String pro;
-  private final String rev;
-  private final String rec;
+  private String cmp;
+  private String pro;
+  private String rev;
+  private String rec;
 }

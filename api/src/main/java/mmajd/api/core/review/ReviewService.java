@@ -1,19 +1,47 @@
 package mmajd.api.core.review;
 
 import java.util.List;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+
+import org.springframework.web.bind.annotation.*;
 
 public interface ReviewService {
 
   /**
    * Sample usage: "curl $HOST:$PORT/review?productId=1".
    *
-   * @param productId Id of the product
+   * @param productId of the product
    * @return the reviews of the product
    */
   @GetMapping(
-    value = "/review",
-    produces = "application/json")
+          value = "/review",
+          produces = "application/json")
   List<Review> getReviews(@RequestParam(value = "productId", required = true) int productId);
+
+
+  /*
+   * Sample usage, see below.
+   *
+   * curl -X POST $HOST:$PORT/review \
+   *   -H "Content-Type: application/json" --data \
+   *   '{"productId":123,"reviewId":456,"author":"x","subject":"x, y, x","content":"x, y, z"}'
+   *
+   * @param body json of the new review
+   * @return newly created review
+   */
+  @PostMapping(
+          value    = "/review",
+          consumes = "application/json",
+          produces = "application/json")
+  Review createReview(@RequestBody Review body);
+
+  /**
+   18a34,41
+
+   /**
+   * Sample usage: "curl -X DELETE $HOST:$PORT/review?productId=1".
+   *
+   * @param productId of the product
+   */
+  @DeleteMapping(value = "/review")
+  void deleteReviews(@RequestParam(value = "productId", required = true)  int productId);
 }
