@@ -1,7 +1,7 @@
 ### Microservices practise 
-- One command to build all services 
+- one commend to build and run all, should be executed from project directory
 ```
-./gradlew build
+./gradlew build && docker-compose build && docker-compose up
 ``` 
 
 - After build completion

@@ -9,12 +9,16 @@ import static reactor.core.publisher.Mono.just;
 
 import mmajd.api.core.product.Product;
 import mmajd.microservices.core.product.presistence.ProductRepository;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import reactor.core.publisher.Flux;
+
+import java.util.List;
 
 
 @SpringBootTest(webEnvironment = RANDOM_PORT)
@@ -28,6 +32,18 @@ class ProductServiceApplicationTests extends MongodbTestBase {
   void setupDb() {
     repository.deleteAll();
   }
+
+
+  @Test
+  void flux() {
+    List<Integer> list = Flux.just(1, 2,3,4)
+            .filter(n -> n % 2 == 0)
+            .map(n -> n * 2)
+            .collectList().block();
+
+    Assertions.assertThat(list).containsExactly(4, 8);
+  }
+
 
   @Test
   void getProductById() {
