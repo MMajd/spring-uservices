@@ -19,8 +19,8 @@ import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.transaction.annotation.Transactional;
 
 @DataJpaTest
-@Transactional(propagation = NOT_SUPPORTED)
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@Transactional(propagation = NOT_SUPPORTED) // stop clearing our database
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE) // stop auto configration
 class PersistenceTests extends MySqlTestBase {
 
     @Autowired
