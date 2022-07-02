@@ -1,6 +1,8 @@
 package mmajd.api.core.recommendation;
 
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 
@@ -33,7 +35,7 @@ public interface RecommendationService {
           consumes = "application/json",
           produces = "application/json"
   )
-  Recommendation createRecommendation(@RequestBody Recommendation body);
+  Flux<Recommendation> createRecommendation(@RequestBody Recommendation body);
 
 
   /**
@@ -44,6 +46,6 @@ public interface RecommendationService {
   @DeleteMapping(
           value = "/recommendation"
   )
-  void deleteRecommendations(@RequestParam(value = "productId", required = true) int productId);
+  Mono<Void> deleteRecommendations(@RequestParam(value = "productId", required = true) int productId);
 
 }

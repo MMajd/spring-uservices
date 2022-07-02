@@ -1,6 +1,7 @@
 package mmajd.api.core.product;
 
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Mono;
 
 public interface ProductService {
 
@@ -31,7 +32,7 @@ public interface ProductService {
           consumes = "application/json",
           produces = "application/json"
   )
-  Product createProduct(@RequestBody Product body);
+  Mono<Product> createProduct(@RequestBody Product body);
 
   /**
    * Sample usage "curl -X DELETE $HOST:$PORT/product/1"
@@ -41,5 +42,5 @@ public interface ProductService {
   @DeleteMapping(
           value = "/product/{productId}"
   )
-  void deleteProduct(@PathVariable int productId);
+  Mono<Void> deleteProduct(@PathVariable int productId);
 }
