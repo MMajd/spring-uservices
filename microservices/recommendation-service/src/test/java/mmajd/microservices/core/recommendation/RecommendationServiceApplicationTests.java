@@ -1,19 +1,25 @@
 package mmajd.microservices.core.recommendation;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.springframework.http.HttpStatus.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static reactor.core.publisher.Mono.just;
 
 import mmajd.api.core.recommendation.Recommendation;
+import mmajd.api.event.Event;
+import mmajd.api.exceptions.InvalidInputException;
 import mmajd.microservices.core.recommendation.entity.RecommendationRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.web.reactive.server.WebTestClient;
+
+import java.util.function.Consumer;
 
 
 @SpringBootTest(webEnvironment = RANDOM_PORT)
@@ -25,9 +31,13 @@ class RecommendationServiceApplicationTests extends MongodbTestBase {
   @Autowired
   private RecommendationRepository repository;
 
+  @Autowired
+  @Qualifier("messageProcessor")
+  private Consumer<Event<Integer, Recommendation>> messageProcessor;
+
   @BeforeEach
   void setupDb() {
-    repository.deleteAll();
+    repository.deleteAll().block();
   }
 
   @Test
@@ -39,7 +49,7 @@ class RecommendationServiceApplicationTests extends MongodbTestBase {
     postAndVerifyRecommendation(productId, 2, OK);
     postAndVerifyRecommendation(productId, 3, OK);
 
-    assertEquals(3, repository.findByProductId(productId).size());
+    assertEquals(3, repository.findByProductId(productId).count().block());
 
     getAndVerifyRecommendationsByProductId(productId, OK)
             .jsonPath("$.length()").isEqualTo(3)
@@ -53,17 +63,15 @@ class RecommendationServiceApplicationTests extends MongodbTestBase {
     int productId = 1;
     int recommendationId = 1;
 
-    postAndVerifyRecommendation(productId, recommendationId, OK)
-            .jsonPath("$.productId").isEqualTo(productId)
-            .jsonPath("$.recommendationId").isEqualTo(recommendationId);
+    sendCreateRecommendationEvent(productId, recommendationId);
 
-    assertEquals(1, repository.count());
+    assertEquals(1, repository.count().block());
 
-    postAndVerifyRecommendation(productId, recommendationId, UNPROCESSABLE_ENTITY)
-            .jsonPath("$.path").isEqualTo("/recommendation")
-            .jsonPath("$.message").isEqualTo("Duplicate key, Product ID: 1, Recommendation ID: 1");
+    InvalidInputException thrown = assertThrows(InvalidInputException.class, () -> sendCreateRecommendationEvent(productId, recommendationId), "Expected an InvalidInputException");
 
-    assertEquals(1, repository.count());
+    assertEquals("Duplicate key, Product ID: 1, Recommendation ID: 1", thrown.getMessage());
+
+    assertEquals(1, repository.count().block());
   }
 
   @Test
@@ -72,13 +80,13 @@ class RecommendationServiceApplicationTests extends MongodbTestBase {
     int productId = 1;
     int recommendationId = 1;
 
-    postAndVerifyRecommendation(productId, recommendationId, OK);
-    assertEquals(1, repository.findByProductId(productId).size());
+    sendCreateRecommendationEvent(productId, recommendationId);
+    assertEquals(1, repository.findByProductId(productId).count().block());
 
-    deleteAndVerifyRecommendationsByProductId(productId, OK);
-    assertEquals(0, repository.findByProductId(productId).size());
+    sendDeleteRecommendation(productId);
+    assertEquals(0, repository.findByProductId(productId).count().block());
 
-    deleteAndVerifyRecommendationsByProductId(productId, OK);
+    sendDeleteRecommendation(productId);
   }
 
   @Test
@@ -155,6 +163,26 @@ class RecommendationServiceApplicationTests extends MongodbTestBase {
             .exchange()
             .expectStatus().isEqualTo(expectedStatus)
             .expectBody();
+  }
+
+
+  private void sendCreateRecommendationEvent(int productId, int recommendationId) {
+    Recommendation recommendation = Recommendation.builder()
+            .productId(productId)
+            .recommendationId(recommendationId)
+            .author("Author " + recommendationId)
+            .rate(recommendationId)
+            .content("Content " + recommendationId)
+            .serviceAddress("SA")
+            .build();
+
+    Event<Integer, Recommendation> event = new Event<>(Event.Type.CREATE, productId, recommendation);
+    messageProcessor.accept(event);
+  }
+
+  private void sendDeleteRecommendation(int productId) {
+    Event<Integer, Recommendation> event = new Event<>(Event.Type.DELETE, productId, null);
+    messageProcessor.accept(event);
   }
 
 }

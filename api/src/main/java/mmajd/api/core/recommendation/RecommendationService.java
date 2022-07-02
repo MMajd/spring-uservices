@@ -17,7 +17,7 @@ public interface RecommendationService {
   @GetMapping(
     value = "/recommendation",
     produces = "application/json")
-  List<Recommendation> getRecommendations(
+  Flux<Recommendation> getRecommendations(
     @RequestParam(value = "productId", required = true) int productId);
 
   /**
@@ -35,7 +35,7 @@ public interface RecommendationService {
           consumes = "application/json",
           produces = "application/json"
   )
-  Flux<Recommendation> createRecommendation(@RequestBody Recommendation body);
+  Mono<Recommendation> createRecommendation(@RequestBody Recommendation body);
 
 
   /**
