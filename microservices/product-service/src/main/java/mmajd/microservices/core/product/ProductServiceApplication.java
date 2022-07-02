@@ -35,6 +35,7 @@ public class ProductServiceApplication {
   @Autowired
   MongoOperations mongoTemplate;
 
+  // TODO: move this into its config class
   @EventListener(ContextRefreshedEvent.class)
   public void initIndicesAfterStartup() {
 
