@@ -52,7 +52,7 @@ public class PersistenceTest extends MongodbTestBase {
                 .content("c")
                 .build();
 
-        repository.save(newEntity);
+        repository.save(newEntity).block();
 
         var found = repository.findById(newEntity.getId()).block();
 

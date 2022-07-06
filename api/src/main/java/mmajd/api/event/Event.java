@@ -3,10 +3,12 @@ package mmajd.api.event;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.ZonedDateTimeSerializer;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.time.ZonedDateTime;
 
 @Getter
+@ToString
 public class Event <K, D> {
 
     public enum Type {
@@ -20,7 +22,7 @@ public class Event <K, D> {
     private final D data;
     private final ZonedDateTime createdAt;
 
-    public Event() {
+    public Event(Type create) {
         eventType = null;
         key = null;
         data = null;

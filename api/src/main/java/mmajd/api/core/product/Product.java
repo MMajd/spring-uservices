@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder(setterPrefix = "")
 public class Product {
   private int productId;
-  private int weight;
   private String name;
+  private int weight;
   private String serviceAddress;
 }

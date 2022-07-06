@@ -37,7 +37,7 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'io.projectreactor:reactor-test'
 
-    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
 
     implementation "org.mapstruct:mapstruct:${mapstructVersion}"
     implementation "org.projectlombok:lombok:${lombokVersion}"

@@ -4,14 +4,15 @@ server.error.include-message: always
 # TODO: use flyway later
 spring.jpa.hibernate.ddl-auto: update
 
-spring:
-  datasource:
-    url: jdbc:mysql://localhost/review-db
-    username: user
-    password: pwd
+spring.datasource:
+  url: jdbc:mysql://localhost/review-db
+  username: user
+  password: pwd
 
-# Give chance to systems with low resources to take its time to start mysql
+
 spring.datasource.hikari.initializationFailTimeout: 60000
+
+spring.cloud.function.definition: messageProcessor
 
 spring.cloud.stream:
   defaultBinder: rabbit
@@ -43,8 +44,6 @@ spring.rabbitmq:
   username: guest
   password: guest
 
-
-
 logging:
   level:
     root: INFO
@@ -59,12 +58,10 @@ spring.config.activate.on-profile: docker
 
 server.port: 8080
 
-
-spring:
-  datasource:
-    url: jdbc:mysql://mysql/review-db
+spring.datasource.url: jdbc:mysql://mysql/review-db
 
 spring.rabbitmq.host: rabbitmq
+
 spring.cloud.stream.kafka.binder.brokers: kafka
 
 ---
