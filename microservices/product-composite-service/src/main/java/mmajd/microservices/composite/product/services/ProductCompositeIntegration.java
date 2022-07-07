@@ -73,13 +73,13 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
     this.webClient = webClient.build();
     this.mapper = mapper;
 
-    productServiceUrl = "http://" + productServiceHost + ":" + productServicePort + "/product";
-    recommendationServiceUrl = "http://" + recommendationServiceHost + ":" + recommendationServicePort + "/recommendation";
-    reviewServiceUrl = "http://" + reviewServiceHost + ":" + reviewServicePort + "/review";
+    productServiceUrl = "http://" + productServiceHost + ":" + productServicePort; 
+    recommendationServiceUrl = "http://" + recommendationServiceHost + ":" + recommendationServicePort;
+    reviewServiceUrl = "http://" + reviewServiceHost + ":" + reviewServicePort;
   }
 
   public Mono<Product> getProduct(int productId) {
-    String url = productServiceUrl + "/" + productId;
+    String url = productServiceUrl + "/product/" + productId;
     LOG.debug("Will call getProduct API on URL: {}", url);
 
     return webClient.get()
@@ -102,7 +102,7 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
 
   @Override
   public Mono<Void> deleteProduct(int productId) {
-    String url = productServiceUrl + "/" + productId;
+    String url = productServiceUrl + "/product/" + productId;
     LOG.debug("Will delete product with id: {}", productId);
 
     return Mono
@@ -113,7 +113,7 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
   }
 
   public Flux<Recommendation> getRecommendations(int productId) {
-      String url = recommendationServiceUrl + "?productId=" + productId;
+      String url = recommendationServiceUrl + "/recommendation?productId=" + productId;
       LOG.debug("Will call getRecommendations API on URL: {}", url);
 
       return webClient
@@ -145,7 +145,7 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
   }
 
   public Flux<Review> getReviews(int productId) {
-    String url = reviewServiceUrl + "?productId=" + productId;
+    String url = reviewServiceUrl + "/review?productId=" + productId;
     LOG.debug("Will call getReviews API on URL: {}", url);
 
     return webClient.get().uri(url).retrieve()
