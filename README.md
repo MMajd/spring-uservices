@@ -1,7 +1,7 @@
 ### Microservices practise 
 - one commend to build and run all, should be executed from project directory
 ```
-./gradlew build && docker-compose build && docker-compose up
+./run.sh
 ``` 
 
 - App implements api composition patter, will migrate to cqrs in future
