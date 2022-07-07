@@ -9,6 +9,12 @@
 - App contains RabbitMQ as default broker but also Kafka config as added in the cloud string section for feature migration
   - Preference of RabbitMQ over Kafka just for the Built-in WebUI in the managment release 
 
+- To query health endpoint in terminal use curl & jq (json processor) 
+```
+curl -s localhost:8080/actuator/health | jq .  
+```
+
+
 - After build completion
     - make sure that you have docker and docker-compose installed on your machine
     - and make sure that you have enough resources to run all services
