@@ -52,8 +52,6 @@ public class ProductCompositeServiceImpl implements ProductCompositeService {
 
       monoList.add(integration.createProduct(product));
 
-      integration.createProduct(product);
-
       if (body.getRecommendations() != null) {
         body.getRecommendations().forEach(r -> {
           Recommendation recommendation = Recommendation.builder()
