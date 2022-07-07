@@ -22,7 +22,8 @@ public class Event <K, D> {
     private final D data;
     private final ZonedDateTime createdAt;
 
-    public Event(Type create) {
+
+    public Event() {
         eventType = null;
         key = null;
         data = null;
